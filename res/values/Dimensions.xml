@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="textsizeVal">6sp</dimen>
+    <dimen name="textsizeLabel">7sp</dimen>
+    <dimen name="textsizeMenu">10sp</dimen>
+    <dimen name="textsizeChart">15sp</dimen>
+
+</resources>

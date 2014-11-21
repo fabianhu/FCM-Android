@@ -23,17 +23,18 @@
 
 package de.huslik_elektronik.android.Gps;
 
-import java.util.ArrayList;
 
-import org.osmdroid.DefaultResourceProxyImpl;
-import org.osmdroid.ResourceProxy;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapView;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 import android.app.Fragment;
-import android.graphics.drawable.Drawable;
-import android.location.GpsStatus;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -62,7 +63,7 @@ public class FragmentGps extends Fragment {
 	// Layout
 	private View rootView;
 	private TextView tvGpsData;
-	private Button btn_start, btn_stop;
+	private Button btn_start, btn_stop, btn_share;
 	private ListView lvGpsList;
 
 	// div
@@ -71,6 +72,7 @@ public class FragmentGps extends Fragment {
 	// data
 	private ArrayList<GpsFrame> lGpsFrame = new ArrayList<>();
 	private GpsListAdapter gpsListAdapterView;
+	private String gpsTrackDate;
 
 	public void setFcm(Fcm fcm) {
 		this.fcm = fcm;
@@ -100,6 +102,8 @@ public class FragmentGps extends Fragment {
 
 		tvGpsData = (TextView) rootView.findViewById(R.id.gpsInfo);
 		btn_start = (Button) rootView.findViewById(R.id.gpsStart);
+		btn_stop = (Button) rootView.findViewById(R.id.gpsStop);
+		btn_share = (Button) rootView.findViewById(R.id.gpsShare);
 
 		btn_start.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -112,10 +116,12 @@ public class FragmentGps extends Fragment {
 				s.insert(6, fRC);
 				cmd = s.toString();
 				fcm.sendMessage(cmd);
+				
+				Calendar currentDate = Calendar.getInstance();  //Get the current date		
+				SimpleDateFormat formatter= new SimpleDateFormat("yyMMdd_HHmm", Locale.GERMAN); //format it as per your requirement
+				gpsTrackDate = formatter.format(currentDate.getTime());
 			}
 		});
-
-		btn_stop = (Button) rootView.findViewById(R.id.gpsStop);
 
 		btn_stop.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -126,6 +132,40 @@ public class FragmentGps extends Fragment {
 			}
 
 		});
+
+		btn_share.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				// Send a message using content of the edit text widget
+				fcm.sendMessage(fd.getCmdStr(COMMAND.STS)); // Stop gps frames
+
+				kmlBuilder kml = new kmlBuilder();
+				String s = kml.getKML(lGpsFrame);
+
+				
+				String filename = "fcm_" + gpsTrackDate + ".kml";
+				File f = null;
+				FileOutputStream outputStream;
+
+				try {
+					f = new File(fcm.getExternalFilesDir(null).getAbsolutePath(), filename);
+					outputStream = new FileOutputStream(f);
+					outputStream.write(s.getBytes());
+					outputStream.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				Uri kmlData = Uri.fromFile(f);
+				Intent intent = new Intent(Intent.ACTION_VIEW);
+				intent.setDataAndType(kmlData,
+						"application/vnd.google-earth.kml+xml");
+
+				startActivity(intent);
+
+			}
+
+		});
+
 	}
 
 	@Override
@@ -176,8 +216,12 @@ public class FragmentGps extends Fragment {
 				GpsFrame gpsFrame = new GpsFrame(longitude, latitude, height,
 						xSpeed, ySpeed, zSpeed, xDist, yDist, zDist, satNum);
 
-				lGpsFrame.add(gpsFrame);
 				gpsListAdapterView.add(gpsFrame);
+				lvGpsList.setSelection(tvGpsData.length() - 1);
+				
+				lGpsFrame.add(gpsFrame);
+				
+				
 
 				String s = "Longitude: " + longitude + "\n" + "Latitude: "
 						+ latitude + "\n" + "Height: " + height + "\n"

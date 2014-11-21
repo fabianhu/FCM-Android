@@ -54,7 +54,7 @@ public class GpsFrame {
 		return (float) (((float) latitude) / 10000000.);
 	}
 
-	public int getHeight() {
+	public int getAltitude() {
 		return height;
 	}
 
@@ -92,7 +92,7 @@ public class GpsFrame {
 
 		// lat 48N, lon 10E, height		
 		sb.append(f.format("%2.4f; %2.4f; %4.1f", (double) getLatitude(),
-				(double) getLongitude(), (double) getHeight()).toString());
+				(double) getLongitude(), (double) getAltitude()).toString());
 
 		return sb.toString();
 	}

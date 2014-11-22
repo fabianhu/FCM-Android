@@ -23,7 +23,8 @@ hs_err_pid*
 .LSOverride
 
 # Icon must ends with two \r.
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -50,4 +51,7 @@ $RECYCLE.BIN/
 *.msi
 *.msm
 *.msp
-/libs
+
+
+bin/
+

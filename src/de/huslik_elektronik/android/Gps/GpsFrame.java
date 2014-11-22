@@ -93,6 +93,8 @@ public class GpsFrame {
 		// lat 48N, lon 10E, height		
 		sb.append(f.format("%2.4f; %2.4f; %4.1f", (double) getLatitude(),
 				(double) getLongitude(), (double) getAltitude()).toString());
+		
+		f.close();
 
 		return sb.toString();
 	}
@@ -112,7 +114,9 @@ public class GpsFrame {
 				* factor + getzSpeed() * factor * getzSpeed() * factor));
 		sb.append(f.format("%3.2f, %3.2f, %3.2f, %3.2f", getxSpeed() * factor,
 				getySpeed() * factor, getzSpeed() * factor, norm).toString());
-
+		
+		f.close();
+		
 		return sb.toString();
 	}
 

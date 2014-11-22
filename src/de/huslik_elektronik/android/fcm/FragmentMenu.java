@@ -17,7 +17,7 @@
 
 package de.huslik_elektronik.android.fcm;
 
-import android.app.Activity;
+//import android.app.Activity;
 import android.app.Fragment;
 import android.content.res.Resources;
 import android.os.Bundle;

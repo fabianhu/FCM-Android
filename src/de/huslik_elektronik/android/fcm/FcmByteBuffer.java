@@ -32,6 +32,8 @@ import de.huslik_elektronik.android.listview.FragmentPara;
 
 public class FcmByteBuffer extends Vector<Byte> {
 
+	static final long serialVersionUID =0;
+
 	public static String TAG = "Processing";
 	private Processing mProcessingThread = null;
 	private Fcm main;

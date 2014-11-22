@@ -17,9 +17,9 @@
 
 package de.huslik_elektronik.android.fcm;
 
-import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+//import java.util.Arrays;
+//import java.util.regex.Matcher;
+//import java.util.regex.Pattern;
 
 public class FcmData {
 

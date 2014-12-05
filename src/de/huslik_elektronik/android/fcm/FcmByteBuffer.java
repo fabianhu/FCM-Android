@@ -226,7 +226,7 @@ public class FcmByteBuffer extends Vector<Byte> {
 								sb.toString().length(), -1, sb.toString())
 								.sendToTarget();
 					try {
-						this.sleep(50);
+						Thread.sleep(50);
 					} catch (InterruptedException e) {
 						Log.e(TAG, "Processing " + e);
 					}
@@ -240,7 +240,7 @@ public class FcmByteBuffer extends Vector<Byte> {
 								result.length, -1, result).sendToTarget();
 
 						try {
-							this.sleep(50);
+							Thread.sleep(50);
 						} catch (InterruptedException e) {
 							Log.e(TAG, "Processing " + e);
 						}

@@ -23,8 +23,6 @@
 
 package de.huslik_elektronik.android.Gps;
 
-
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
@@ -47,7 +45,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import de.huslik_elektronik.android.fcm.Fcm;
-import de.huslik_elektronik.android.fcm.FcmByteBuffer;
+
 import de.huslik_elektronik.android.fcm.FcmData;
 import de.huslik_elektronik.android.fcm.FcmData.COMMAND;
 import de.huslik_elektronik.android.fcm.R;
@@ -116,9 +114,12 @@ public class FragmentGps extends Fragment {
 				s.insert(6, fRC);
 				cmd = s.toString();
 				fcm.sendMessage(cmd);
-				
-				Calendar currentDate = Calendar.getInstance();  //Get the current date		
-				SimpleDateFormat formatter= new SimpleDateFormat("yyMMdd_HHmm", Locale.GERMAN); //format it as per your requirement
+
+				Calendar currentDate = Calendar.getInstance(); // Get the
+																// current date
+				SimpleDateFormat formatter = new SimpleDateFormat(
+						"yyMMdd_HHmm", Locale.GERMAN); // format it as per your
+														// requirement
 				gpsTrackDate = formatter.format(currentDate.getTime());
 			}
 		});
@@ -126,8 +127,8 @@ public class FragmentGps extends Fragment {
 		btn_stop.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				// Send a message using content of the edit text widget
-				FcmByteBuffer buffer = (FcmByteBuffer) (fcm.getBuffer())
-						.clone();
+				// FcmByteBuffer buffer = (FcmByteBuffer)
+				// (fcm.getBuffer()).clone();
 				fcm.sendMessage(fd.getCmdStr(COMMAND.STS));
 			}
 
@@ -141,13 +142,13 @@ public class FragmentGps extends Fragment {
 				kmlBuilder kml = new kmlBuilder();
 				String s = kml.getKML(lGpsFrame);
 
-				
 				String filename = "fcm_" + gpsTrackDate + ".kml";
 				File f = null;
 				FileOutputStream outputStream;
 
 				try {
-					f = new File(fcm.getExternalFilesDir(null).getAbsolutePath(), filename);
+					f = new File(fcm.getExternalFilesDir(null)
+							.getAbsolutePath(), filename);
 					outputStream = new FileOutputStream(f);
 					outputStream.write(s.getBytes());
 					outputStream.close();
@@ -218,10 +219,8 @@ public class FragmentGps extends Fragment {
 
 				gpsListAdapterView.add(gpsFrame);
 				lvGpsList.setSelection(tvGpsData.length() - 1);
-				
+
 				lGpsFrame.add(gpsFrame);
-				
-				
 
 				String s = "Longitude: " + longitude + "\n" + "Latitude: "
 						+ latitude + "\n" + "Height: " + height + "\n"

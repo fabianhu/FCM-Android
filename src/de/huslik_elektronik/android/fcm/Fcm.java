@@ -64,7 +64,7 @@ import de.huslik_elektronik.android.listview.FragmentPara;
  */
 public class Fcm extends Activity {
 	// Debugging
-	private static int count = 0;
+
 	private static final String TAG = "FCM";
 	public static final boolean D = true;
 
@@ -87,7 +87,7 @@ public class Fcm extends Activity {
 
 	// Intent request codes
 	private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
-	private static final int REQUEST_CONNECT_DEVICE_INSECURE = 2;
+
 	private static final int REQUEST_ENABLE_BT = 3;
 
 	// Preferences FCM
@@ -135,8 +135,7 @@ public class Fcm extends Activity {
 
 	// Name of the connected device
 	private String mConnectedDeviceName = null;
-	// String buffer for outgoing messages
-	private StringBuffer mOutStringBuffer;
+
 	// Local Bluetooth adapter
 	private BluetoothAdapter mBluetoothAdapter = null;
 	// Member object for the chat services
@@ -158,7 +157,7 @@ public class Fcm extends Activity {
 
 		// Setup Fragements
 		StringBuilder mInfo = new StringBuilder();
-		
+
 		if (M_MENU) {
 			fMenu = new FragmentMenu();
 			fMenu.setFcm(this);
@@ -208,11 +207,11 @@ public class Fcm extends Activity {
 		// Preferences
 		setting = getSharedPreferences(PREFS_NAME, Activity.MODE_PRIVATE);
 
-		File f = getDatabasePath(PREFS_NAME+".xml");
+		File f = getDatabasePath(PREFS_NAME + ".xml");
 
 		if (f != null)
-		    Log.i("TAG", f.getAbsolutePath());
-		
+			Log.i("TAG", f.getAbsolutePath());
+
 		// Get local Bluetooth adapter
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -299,18 +298,6 @@ public class Fcm extends Activity {
 		super.onDestroy();
 	}
 
-	private void ensureDiscoverable() {
-		if (D)
-			Log.d(TAG, "ensure discoverable");
-		if (mBluetoothAdapter.getScanMode() != BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
-			Intent discoverableIntent = new Intent(
-					BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-			discoverableIntent.putExtra(
-					BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
-			startActivity(discoverableIntent);
-		}
-	}
-
 	/**
 	 * Sends a message.
 	 * 
@@ -384,13 +371,13 @@ public class Fcm extends Activity {
 				}
 				break;
 			case MESSAGE_WRITE:
-				byte[] writeBuf = (byte[]) msg.obj;
+				//byte[] writeBuf = (byte[]) msg.obj;
 				// construct a string from the buffer
-				String writeMessage = new String(writeBuf);
+				//String writeMessage = new String(writeBuf);
 				break;
 			case MESSAGE_READ:
 				// byte[] readBuf = (byte[]) msg.obj;
-				byte[] result;
+
 				byte[] readBuf = (byte[]) msg.obj;
 				buffer.add(readBuf, msg.arg1); // byte buffer solves 0x10 LF
 				break;
@@ -563,8 +550,7 @@ public class Fcm extends Activity {
 	}
 
 	private void startupFcmService() {
-		// Initialize the buffer for outgoing messages
-		mOutStringBuffer = new StringBuffer("");
+
 		// Initialize the BluetoothChatService to perform bluetooth
 		// connections
 		if (mFcmService == null)

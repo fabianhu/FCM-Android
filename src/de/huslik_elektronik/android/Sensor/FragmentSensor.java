@@ -50,7 +50,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import de.huslik_elektronik.android.Sensor.SensorFrame.SENSOR;
 import de.huslik_elektronik.android.fcm.Fcm;
-import de.huslik_elektronik.android.fcm.FcmByteBuffer;
+
 import de.huslik_elektronik.android.fcm.FcmData;
 import de.huslik_elektronik.android.fcm.FcmData.COMMAND;
 import de.huslik_elektronik.android.fcm.R;
@@ -98,25 +98,24 @@ public class FragmentSensor extends Fragment implements OnItemSelectedListener,
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		rootView = inflater.inflate(R.layout.sensor, container, false);		
+		rootView = inflater.inflate(R.layout.sensor, container, false);
 		regHandler();
 		setupFcmSensor(rootView);
 
 		return rootView;
 	}
-	
+
 	@Override
-	public void onStart(){
+	public void onStart() {
 		super.onStart();
-//		getScreenLock();
-	}
-	
-	@Override
-	public void onStop(){
-		super.onStop();
-//		releaseScreenLock();
+		// getScreenLock();
 	}
 
+	@Override
+	public void onStop() {
+		super.onStop();
+		// releaseScreenLock();
+	}
 
 	public void addSensorFrame(SensorFrame sf) {
 		data.add(sf);
@@ -227,21 +226,20 @@ public class FragmentSensor extends Fragment implements OnItemSelectedListener,
 				char fRC = (char) fR;
 				s.insert(6, fRC);
 				cmd = s.toString();
-				fcm.sendMessage(cmd);			
+				fcm.sendMessage(cmd);
 			}
 		});
 		logStop = (Button) v.findViewById(R.id.logStop);
 		logStop.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				// Send a message using content of the edit text widget
-				FcmByteBuffer buffer = (FcmByteBuffer) (fcm.getBuffer())
-						.clone();
+				// FcmByteBuffer buffer = (FcmByteBuffer)
+				// (fcm.getBuffer()).clone();
 				fcm.sendMessage(fd.getCmdStr(COMMAND.STS));
 
 				mRenderer.setXAxisMin(0);
 				mRenderer.setXAxisMax(getSensorFrameSize());
 				chart.repaint();
-				
 
 			}
 

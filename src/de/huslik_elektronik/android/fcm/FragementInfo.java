@@ -35,8 +35,7 @@ public class FragementInfo extends Fragment {
 
 	// References
 	private Fcm fcm = null;
-	private FcmData fd = new FcmData();
-	
+
 	private String sModules = "";
 
 	public void setFcm(Fcm fcm) {
@@ -49,18 +48,16 @@ public class FragementInfo extends Fragment {
 		setupFcmInfo(view);
 		return view;
 	}
-	
-	public void setModules(String s)
-	{
+
+	public void setModules(String s) {
 		sModules = "\nActivated Modules: " + s;
 	}
-	
 
 	private void setupFcmInfo(View v) {
 		Log.d(TAG, "setupFcmInfo()");
 		tvInfo = (TextView) v.findViewById(R.id.i_info);
 	}
-	
+
 	@Override
 	public void onStart() {
 		super.onStart();
@@ -71,9 +68,9 @@ public class FragementInfo extends Fragment {
 		String sFcmVersion = "FCM Version " + h + "." + l + "."
 				+ fcm.getVersionL() + "\n";
 		String sParameters = "";
-		if (fcm.M_PARA)
+		if (Fcm.M_PARA)
 			sParameters = "Parameters: " + fcm.getfPara().getAmount();
-				
+
 		tvInfo.setText(sInfo + sFcmVersion + sParameters + sModules);
 	}
 

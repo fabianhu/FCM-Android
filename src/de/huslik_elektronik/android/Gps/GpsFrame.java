@@ -17,9 +17,10 @@
 
 package de.huslik_elektronik.android.Gps;
 
+import java.io.Serializable;
 import java.util.Formatter;
 
-public class GpsFrame {
+public class GpsFrame implements Serializable{
 
 	public static enum SPEED {
 		ms, kmh

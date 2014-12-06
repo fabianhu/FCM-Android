@@ -54,6 +54,7 @@
     <!-- FCM Info -->
     <string name="i_infoText"> FCM Android\nVersion 0.1\n(c) Joachim Weishaupt\n2014
 \n</string>
+    <string name="flightMap">Flight Map</string>
     
 
 </resources>

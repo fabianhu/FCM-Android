@@ -37,7 +37,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
  >
-        <activity            
+        <activity
             android:name="de.huslik_elektronik.android.fcm.Fcm"
             android:configChanges="keyboardHidden" >
             android:screenOrientation="portrait"
@@ -47,6 +47,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="de.huslik_elektronik.android.flightMap.FlightMap"
+            android:configChanges="orientation"
+            android:label="@string/flightMap"
+            android:parentActivityName="de.huslik_elektronik.android.fcm.Fcm"
+           />
         <activity
             android:name="de.huslik_elektronik.android.fcm.DeviceListActivity"
             android:configChanges="orientation|keyboardHidden"

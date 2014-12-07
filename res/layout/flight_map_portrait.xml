@@ -6,16 +6,29 @@
 
     <org.osmdroid.views.MapView
         android:id="@+id/fm_map"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="1"
-        tilesource="MapquestOSM" />
-
-    <ListView
-        android:id="@+id/fm_table"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="gpsInfo" />
+        android:layout_weight="2"
+        tilesource="MapquestOSM" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+         android:orientation="vertical"
+        android:layout_weight="1" >
+
+        <TextView
+            android:id="@+id/fm_info"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="gpsInfo" />
+
+        <ListView
+            android:id="@+id/fm_table"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="gpsList" >
+        </ListView>
+    </LinearLayout>
 
 </LinearLayout>

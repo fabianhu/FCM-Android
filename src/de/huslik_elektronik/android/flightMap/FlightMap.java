@@ -78,7 +78,7 @@ public class FlightMap extends Activity {
 		}
 
 		// simulate flight Track
-		simulateTrack();
+		//simulateTrack();
 
 		// Info Table
 		gpsData = (ListView) findViewById(R.id.fm_table);

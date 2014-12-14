@@ -17,9 +17,10 @@
 
 package de.huslik_elektronik.android.Gps;
 
+import java.io.Serializable;
 import java.util.Formatter;
 
-public class GpsFrame {
+public class GpsFrame implements Serializable{
 
 	public static enum SPEED {
 		ms, kmh
@@ -37,6 +38,20 @@ public class GpsFrame {
 		longitude = lo;
 		latitude = la;
 		height = h;
+		xSpeed = xS;
+		ySpeed = yS;
+		zSpeed = zS;
+		xDist = xD;
+		yDist = yD;
+		zDist = zD;
+		nSatellites = nSat;
+	}
+	
+	public GpsFrame(float lo, float la, float h, float xS, float yS, float zS,
+			float xD, float yD, float zD, int nSat) {
+		longitude = (int) (lo * 10_000_000);
+		latitude = (int) (la * 10_000_000);
+		height = (int) h;
 		xSpeed = xS;
 		ySpeed = yS;
 		zSpeed = zS;
@@ -118,6 +133,21 @@ public class GpsFrame {
 		f.close();
 		
 		return sb.toString();
+	}
+	
+	public double getSpeedValue(SPEED s) {
+		double factor = 1.;
+		
+		if (s.equals(SPEED.ms))
+			factor = 1.;
+		else if (s.equals(SPEED.kmh))
+			factor = 3.6;
+		// x, y, z -> norm
+		double norm =  Math.sqrt((double) (getxSpeed() * factor
+				* getxSpeed() * factor + getySpeed() * factor * getySpeed()
+				* factor + getzSpeed() * factor * getzSpeed() * factor));
+		
+		return norm;
 	}
 
 }

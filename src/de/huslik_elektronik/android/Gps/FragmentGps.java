@@ -45,10 +45,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import de.huslik_elektronik.android.fcm.Fcm;
-
 import de.huslik_elektronik.android.fcm.FcmData;
 import de.huslik_elektronik.android.fcm.FcmData.COMMAND;
 import de.huslik_elektronik.android.fcm.R;
+import de.huslik_elektronik.android.flightMap.FlightMap;
 
 public class FragmentGps extends Fragment {
 	public static String TAG = "FCM_GPS";
@@ -61,7 +61,7 @@ public class FragmentGps extends Fragment {
 	// Layout
 	private View rootView;
 	private TextView tvGpsData;
-	private Button btn_start, btn_stop, btn_share;
+	private Button btn_start, btn_stop, btn_share, btn_flightMap;
 	private ListView lvGpsList;
 
 	// div
@@ -101,6 +101,7 @@ public class FragmentGps extends Fragment {
 		tvGpsData = (TextView) rootView.findViewById(R.id.gpsInfo);
 		btn_start = (Button) rootView.findViewById(R.id.gpsStart);
 		btn_stop = (Button) rootView.findViewById(R.id.gpsStop);
+		btn_flightMap = (Button) rootView.findViewById(R.id.gpsFlightMap);
 		btn_share = (Button) rootView.findViewById(R.id.gpsShare);
 
 		btn_start.setOnClickListener(new OnClickListener() {
@@ -130,6 +131,17 @@ public class FragmentGps extends Fragment {
 				// FcmByteBuffer buffer = (FcmByteBuffer)
 				// (fcm.getBuffer()).clone();
 				fcm.sendMessage(fd.getCmdStr(COMMAND.STS));
+			}
+
+		});
+
+		btn_flightMap.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				// Testbed - flightMap
+				Intent intent = new Intent(fcm.getBaseContext(),
+						FlightMap.class);
+				intent.putExtra("flightLog", lGpsFrame);	
+				startActivity(intent);
 			}
 
 		});

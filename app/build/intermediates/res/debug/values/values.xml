@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- From: file:/D:/workingProjects/Android-Fcm-afterMig/app/src/main/res/values/Dimensions.xml -->
+    <eat-comment/>
+    <dimen name="textsizeChart">15sp</dimen>
+    <dimen name="textsizeLabel">7sp</dimen>
+    <dimen name="textsizeMenu">10sp</dimen>
+    <dimen name="textsizeVal">6sp</dimen>
+    <!-- From: file:/D:/workingProjects/Android-Fcm-afterMig/app/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="app_name">FCM Android</string>
+    <string name="bt_not_enabled_leaving">Bluetooth was not enabled. Leaving Bluetooth Chat.</string>
+    <string name="button_scan">Scan for devices</string>
+    <string name="discoverable">Make discoverable</string>
+    <string name="flightMap">Flight Map</string>
+    <string name="i_infoText"> FCM Android\nVersion 0.1\n(c) Joachim Weishaupt\n2014
+\n</string>
+    <string name="insecure_connect">Connect a device - Insecure</string>
+    <string name="last_connect">Connect to last known device </string>
+    <string name="m_ent">ENTER</string>
+    <string name="m_fcm">Get FCM Version</string>
+    <string name="m_m">-</string>
+    <string name="m_mm">--</string>
+    <string name="m_mnu">Get FCM Menu</string>
+    <string name="m_p">+</string>
+    <string name="m_pp">++</string>
+    <string name="none_found">No devices found</string>
+    <string name="none_paired">No devices have been paired</string>
+    <string name="not_connected">You are not connected to a device</string>
+    <string name="scanning">scanning for devices...</string>
+    <string name="secure_connect">Connect a device - Secure</string>
+    <string name="select_device">select a device to connect</string>
+    <string name="send">Send</string>
+    <string name="title_connected_to">connected to <ns1:g id="device_name">%1$s</ns1:g></string>
+    <string name="title_connecting">connecting...</string>
+    <string name="title_not_connected">not connected</string>
+    <string name="title_other_devices">Other Available Devices</string>
+    <string name="title_paired_devices">Paired Devices</string>
+</resources>

@@ -1,0 +1,4 @@
+D:\workingProjects\Android-Fcm-afterMig\app\build\intermediates\classes\debug
+D:\workingProjects\Android-Fcm-afterMig\app\build\intermediates\pre-dexed\debug\slf4j-android-1.6.1-RC1-4929c44a851c7833a34115afc266597ce6421689.jar
+D:\workingProjects\Android-Fcm-afterMig\app\build\intermediates\pre-dexed\debug\achartengine-1.1.0-aaefd967dcad5fa3e95f40710f4a2d8f85a428bb.jar
+D:\workingProjects\Android-Fcm-afterMig\app\build\intermediates\pre-dexed\debug\osmdroid-android-4.2-7dc0889c070d15eb0de7984f17726b13d14cf481.jar

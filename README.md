@@ -6,7 +6,7 @@ Android based program for adjusting and diagnosis of FCM over FCMCP
 <h2>Announcments</h2>
 2014-12-14:
 Eclipse Project moved to Android Studio 1.0.1
-Take respository an import via "Non-Android Studio Project"
+Import via "import Project"
 API changed to API 21
 
 

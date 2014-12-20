@@ -3,6 +3,16 @@ FCM-Android
 
 Android based program for adjusting and diagnosis of FCM over FCMCP
 
+<h2>Announcments</h2>
+2014-12-14:
+Eclipse Project moved to Android Studio 1.0.1;
+Import via "import Project";
+API changed to API 21
+
+Libs had to be moved to app/libs
+
+
+<h2>Third Party Libs</h2>
 To build, link the following Libs
 achartengine-1.1.0.jar 
 (https://code.google.com/p/achartengine/downloads/list)

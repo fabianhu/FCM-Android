@@ -22,6 +22,11 @@ import java.util.Formatter;
 
 public class GpsFrame implements Serializable{
 
+    final public static String Frame = "FcmFrame";
+    final public static String Position = "Coord";
+    final public static String Speed = "Speed";
+    final public static String DistanceToHome = "DistanceToHome";
+
 	public static enum SPEED {
 		ms, kmh
 	};
@@ -33,33 +38,35 @@ public class GpsFrame implements Serializable{
 
 	private int nSatellites;
 
-	public GpsFrame(int lo, int la, int h, float xS, float yS, float zS,
-			float xD, float yD, float zD, int nSat) {
-		longitude = lo;
-		latitude = la;
-		height = h;
-		xSpeed = xS;
-		ySpeed = yS;
-		zSpeed = zS;
-		xDist = xD;
-		yDist = yD;
-		zDist = zD;
-		nSatellites = nSat;
-	}
-	
-	public GpsFrame(float lo, float la, float h, float xS, float yS, float zS,
-			float xD, float yD, float zD, int nSat) {
-		longitude = (int) (lo * 10_000_000);
-		latitude = (int) (la * 10_000_000);
-		height = (int) h;
-		xSpeed = xS;
-		ySpeed = yS;
-		zSpeed = zS;
-		xDist = xD;
-		yDist = yD;
-		zDist = zD;
-		nSatellites = nSat;
-	}
+    public GpsFrame() {
+        setGpsFrame(0, 0, 0, 0F, 0F, 0F, 0F, 0F, 0F, 0);
+    }
+
+    public GpsFrame(int lo, int la, int h, float xS, float yS, float zS,
+                    float xD, float yD, float zD, int nSat) {
+        setGpsFrame(lo, la, h, xS, yS, zS,
+                xD, yD, zD, nSat);
+    }
+
+    public GpsFrame(float lo, float la, float h, float xS, float yS, float zS,
+                    float xD, float yD, float zD, int nSat) {
+        setGpsFrame((int) (lo * 10_000_000), (int) (la * 10_000_000), (int) h, xS, yS, zS,
+                xD, yD, zD, nSat);
+    }
+
+    private void setGpsFrame(int lo, int la, int h, float xS, float yS, float zS,
+                             float xD, float yD, float zD, int nSat) {
+        longitude = lo;
+        latitude = la;
+        height = h;
+        xSpeed = xS;
+        ySpeed = yS;
+        zSpeed = zS;
+        xDist = xD;
+        yDist = yD;
+        zDist = zD;
+        nSatellites = nSat;
+    }
 
 	public float getLongitude() {
 		return (float) (((float) longitude) / 10000000.);

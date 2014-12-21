@@ -23,13 +23,6 @@
 
 package de.huslik_elektronik.android.Gps;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Locale;
-
 import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
@@ -44,6 +37,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
+
 import de.huslik_elektronik.android.fcm.Fcm;
 import de.huslik_elektronik.android.fcm.FcmData;
 import de.huslik_elektronik.android.fcm.FcmData.COMMAND;
@@ -140,9 +141,12 @@ public class FragmentGps extends Fragment {
 				// Testbed - flightMap
 				Intent intent = new Intent(fcm.getBaseContext(),
 						FlightMap.class);
-				intent.putExtra("flightLog", lGpsFrame);	
-				startActivity(intent);
-			}
+                // all fcm data within Extended Data Tag im kml 2.2
+                kmlBuilder kml = new kmlBuilder();
+                String s = kml.getKML(lGpsFrame);
+                intent.putExtra("kml", s);
+                startActivity(intent);
+            }
 
 		});
 
@@ -159,9 +163,8 @@ public class FragmentGps extends Fragment {
 				FileOutputStream outputStream;
 
 				try {
-					f = new File(fcm.getExternalFilesDir(null)
-							.getAbsolutePath(), filename);
-					outputStream = new FileOutputStream(f);
+                    f = new File(fcm.getExternalFilesDir(null).getAbsolutePath(), filename);
+                    outputStream = new FileOutputStream(f);
 					outputStream.write(s.getBytes());
 					outputStream.close();
 				} catch (Exception e) {

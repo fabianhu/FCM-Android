@@ -132,7 +132,24 @@ public class FragmentGps extends Fragment {
 				// FcmByteBuffer buffer = (FcmByteBuffer)
 				// (fcm.getBuffer()).clone();
 				fcm.sendMessage(fd.getCmdStr(COMMAND.STS));
-			}
+
+                String filename = getKmlFilename();
+                File f = null;
+                FileOutputStream outputStream;
+
+                // all fcm data within Extended Data Tag im kml 2.2
+                kmlBuilder kml = new kmlBuilder();
+                String s = kml.getKML(lGpsFrame);
+
+                try {
+                    f = new File(fcm.getExternalFilesDir(null).getAbsolutePath(), filename);
+                    outputStream = new FileOutputStream(f);
+                    outputStream.write(s.getBytes());
+                    outputStream.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
 		});
 
@@ -144,6 +161,7 @@ public class FragmentGps extends Fragment {
                 // all fcm data within Extended Data Tag im kml 2.2
                 kmlBuilder kml = new kmlBuilder();
                 String s = kml.getKML(lGpsFrame);
+                intent.putExtra("filename", getKmlFilename());      // set actual logfile
                 intent.putExtra("kml", s);
                 startActivity(intent);
             }
@@ -158,18 +176,15 @@ public class FragmentGps extends Fragment {
 				kmlBuilder kml = new kmlBuilder();
 				String s = kml.getKML(lGpsFrame);
 
-				String filename = "fcm_" + gpsTrackDate + ".kml";
-				File f = null;
-				FileOutputStream outputStream;
+//				String filename = "fcm_" + gpsTrackDate + ".kml";
+                String filename = getKmlFilename();
+                File f = null;
 
-				try {
+                try {
                     f = new File(fcm.getExternalFilesDir(null).getAbsolutePath(), filename);
-                    outputStream = new FileOutputStream(f);
-					outputStream.write(s.getBytes());
-					outputStream.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
 				Uri kmlData = Uri.fromFile(f);
 				Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -197,6 +212,13 @@ public class FragmentGps extends Fragment {
 		// TODO Save list to file
 
 	}
+
+    private String getKmlFilename() {
+        String filename = "";
+        if (gpsTrackDate != null)
+            filename = "fcm_" + gpsTrackDate + ".kml";
+        return filename;
+    }
 
 	// The Handler that gets information back from the BluetoothChatService
 	private final Handler gHandler = new Handler() {
@@ -247,4 +269,6 @@ public class FragmentGps extends Fragment {
 			}
 		}
 	};
+
+
 }

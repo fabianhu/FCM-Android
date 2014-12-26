@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2009 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +13,6 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <string name="app_name">FCM Android</string>
@@ -50,11 +48,13 @@
     <string name="m_ent">ENTER</string>
     <string name="m_p">+</string>
     <string name="m_pp">++</string>
-    
+
     <!-- FCM Info -->
     <string name="i_infoText"> FCM Android\nVersion 0.1\n(c) Joachim Weishaupt\n2014
 \n</string>
     <string name="flightMap">Flight Map</string>
-    
+    <string name="title_activity_file_selector">FileSelector</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

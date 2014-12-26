@@ -29,9 +29,13 @@
 package de.huslik_elektronik.android.flightMap;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -57,6 +61,9 @@ public class FlightMap extends Activity {
 
     private ArrayList<GpsFrame> flightLog = null;
 
+    final public static int FILE_SELECTED_REQUEST = 1;
+    final public static String FILENAME = "FILENAME";
+
     // GUI
     private MapView map;
     private TextView tv_info;
@@ -68,22 +75,45 @@ public class FlightMap extends Activity {
     private ArrayList<OverlayItem> poi;
     private DefaultResourceProxyImpl resourceProxy;
 
+    // data
+    private String filename;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.flight_map_portrait);
 
+        // Flight Info
+        tv_info = (TextView) findViewById(R.id.fm_info);
+
+        // Map Issues
+        map = (MapView) findViewById(R.id.fm_map);
+        map.setTileSource(TileSourceFactory.MAPQUESTOSM);
+
+        map.setBuiltInZoomControls(true);
+        map.setMultiTouchControls(true);
+        map.getController().setZoom(16);
+
+
         // get Intent Data
         Bundle data = getIntent().getExtras();
         if (data != null) {
+            filename = data.getString("filename");
             String kmlData = data.getString("kml");
             ParseFcmKml kmlParser = new ParseFcmKml();
             kmlParser.load(kmlData);
             flightLog = kmlParser.getFlightLog();
         }
 
+        setupTrackToView();
+    }
+
+    private void setupTrackToView() {
+
+
         // simulate flight Track
-        //simulateTrack();
+        if (flightLog.size() == 0)
+            simulateTrack();
 
         // Info Table
         gpsData = (ListView) findViewById(R.id.fm_table);
@@ -106,8 +136,6 @@ public class FlightMap extends Activity {
             }
         });
 
-        // Flight Info
-        tv_info = (TextView) findViewById(R.id.fm_info);
         double speedMax = 0.;
         double heightMin = 0., heightMax = 0.;
         for (int k = 0; k < flightLog.size(); k++) {
@@ -128,15 +156,6 @@ public class FlightMap extends Activity {
                 + heightMax);
         tv_info.setText(flightInfo.toString());
 
-        // Map Issues
-        map = (MapView) findViewById(R.id.fm_map);
-        map.setTileSource(TileSourceFactory.MAPQUESTOSM);
-
-        map.setBuiltInZoomControls(true);
-        map.setMultiTouchControls(true);
-        map.getController().setZoom(16);
-        map.getController().setCenter(getCenterPoint());
-
         // Overlay Path
         PathOverlay myPath = new PathOverlay(Color.RED, this);
         for (int i = 0; i < flightLog.size(); i++) {
@@ -146,6 +165,8 @@ public class FlightMap extends Activity {
         map.getOverlays().add(myPath);
 
         // Special Points
+        map.getController().setCenter(getCenterPoint());
+
         resourceProxy = new DefaultResourceProxyImpl(getApplicationContext());
         poi = new ArrayList<>();
 
@@ -166,7 +187,6 @@ public class FlightMap extends Activity {
         poi.add(end);
         POIItemizedOverlay overlay = new POIItemizedOverlay(this, poi);
         map.getOverlays().add(overlay);
-
     }
 
     private GeoPoint getCenterPoint() {
@@ -189,6 +209,48 @@ public class FlightMap extends Activity {
         flightLog.add(new GpsFrame(10.332f, 48.383f, 440f, 0f, 0f, 0f, 0f, 0f,
                 0f, 6));
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_flightmap, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_searchTrack:
+                //openSearch();
+                //Log.d("MENU", "open FileChooser");
+                Intent intent = new Intent(this, FileSelector.class);
+//                ArrayList<String> extensions = new ArrayList<String>();
+//                extensions.add(".kml");
+//                intent.putStringArrayListExtra("filterFileExtension", extensions);
+                startActivityForResult(intent, FILE_SELECTED_REQUEST);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == FILE_SELECTED_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                String fn = data.getStringExtra(FILENAME);
+                ParseFcmKml kmlParser = new ParseFcmKml();
+                kmlParser.load(this, fn);
+                flightLog = kmlParser.getFlightLog();
+
+                setupTrackToView();
+            }
+        }
     }
 
 

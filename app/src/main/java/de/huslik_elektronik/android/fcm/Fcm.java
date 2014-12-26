@@ -35,8 +35,6 @@ package de.huslik_elektronik.android.fcm;
 
 //import com.example.android.BluetoothChat.R;
 
-import java.io.File;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -54,6 +52,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import java.io.File;
+
 import de.huslik_elektronik.android.Gps.FragmentGps;
 import de.huslik_elektronik.android.Sensor.FragmentSensor;
 import de.huslik_elektronik.android.fcm.FcmData.COMMAND;
@@ -93,7 +94,8 @@ public class Fcm extends Activity {
 	// Preferences FCM
 	public static String PREFS_NAME = "FCM_Android";
 	public static String LAST_BT = "lastKnownDevice";
-	SharedPreferences setting;
+
+    SharedPreferences setting;
 	public static int MENUREPEAT = 5; // after MENUREPEAT loops - menu was
 										// written to ui
 
@@ -272,7 +274,10 @@ public class Fcm extends Activity {
 
 		// Release Screenlock
 		releaseScreenLock();
-	}
+
+        // store last used tab
+        // TODO
+    }
 
 	@Override
 	public void onDestroy() {

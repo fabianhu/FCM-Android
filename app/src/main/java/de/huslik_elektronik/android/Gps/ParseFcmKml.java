@@ -43,12 +43,17 @@ public class ParseFcmKml {
         try {
             File f = new File(c.getExternalFilesDir(null).getAbsolutePath(), filename);
             is = new FileInputStream(f);
-            //is = c.getAssets().open("fcm_2.xml");
-            xmlFactoryObject = XmlPullParserFactory.newInstance();
-            XmlPullParser myParser = xmlFactoryObject.newPullParser();
-            myParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            myParser.setInput(is, null);
-            parseFcmKML(myParser);
+
+            System.out.println("Total file size to read (in bytes) : "
+                    + is.available());
+
+            int content;
+            StringBuilder s = new StringBuilder();
+            while ((content = is.read()) != -1) {
+                // convert to char and display it
+                s.append((char) content);
+            }
+            load(s.toString());
             is.close();
         } catch (Exception e) {
             Log.e("xmlParser", e.toString());

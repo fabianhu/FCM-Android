@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@+id/action_searchTrack"
+        android:icon="@drawable/opened_folder"
+        android:showAsAction="ifRoom|collapseActionView"
+        android:title="Search Track"/>
+
+</menu>

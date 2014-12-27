@@ -18,22 +18,28 @@
 package de.huslik_elektronik.android.fcm;
 
 import android.app.ActionBar.Tab;
-import android.app.ActionBar;			// must be imported manually
+import android.app.ActionBar;            // must be imported manually
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 
 public class FcmTabListener implements ActionBar.TabListener {
     private Fragment fragment;
+    private Fcm fcm;
 
-    public FcmTabListener(Fragment fragment){
+    public FcmTabListener(Fragment fragment, Fcm f) {
         this.fragment = fragment;
+        fcm = f;
     }
-    public void onTabSelected(Tab tab, FragmentTransaction ft){
+
+    public void onTabSelected(Tab tab, FragmentTransaction ft) {
         ft.replace(R.id.fragment_container, fragment);
+        fcm.setActiveTab(fragment);
     }
+
     public void onTabReselected(Tab tab, FragmentTransaction ft) {
-    	// do nothing
+        // do nothing
     }
+
     public void onTabUnselected(Tab tab, FragmentTransaction ft) {
         ft.remove(fragment);
     }

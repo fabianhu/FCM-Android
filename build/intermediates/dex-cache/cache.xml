@@ -9,6 +9,13 @@
         <dex dex="D:\workingProjects\Android-Fcm-afterMig\app\build\intermediates\pre-dexed\debug\achartengine-1.1.0-aaefd967dcad5fa3e95f40710f4a2d8f85a428bb.jar" />
     </item>
     <item
+        jar="D:\workingProjects\FCM-Android\app\libs\achartengine-1.1.0.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="9932e3fb9fbe54e80873e77f72a99f79e33b3250">
+        <dex dex="D:\workingProjects\FCM-Android\app\build\intermediates\pre-dexed\debug\achartengine-1.1.0-1cc5e5c7f1c7167f111dc8b801edd066f26ff16c.jar" />
+    </item>
+    <item
         jar="D:\workingProjects\Android-Fcm-afterMig\app\libs\osmdroid-android-4.2.jar"
         jumboMode="false"
         revision="21.1.1"
@@ -21,6 +28,20 @@
         revision="21.1.1"
         sha1="a0b527e8aabcc1f1e97d1674dc3f4f0794ec5df1">
         <dex dex="D:\workingProjects\Android-Fcm-afterMig\app\build\intermediates\pre-dexed\debug\slf4j-android-1.6.1-RC1-4929c44a851c7833a34115afc266597ce6421689.jar" />
+    </item>
+    <item
+        jar="D:\workingProjects\FCM-Android\app\libs\osmdroid-android-4.2.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="f3a0c73a9ed04a5d0959789c53da9f08462bfcc2">
+        <dex dex="D:\workingProjects\FCM-Android\app\build\intermediates\pre-dexed\debug\osmdroid-android-4.2-91470db211457068cf23dec6e52f5cc8e32852e3.jar" />
+    </item>
+    <item
+        jar="D:\workingProjects\FCM-Android\app\libs\slf4j-android-1.6.1-RC1.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="a0b527e8aabcc1f1e97d1674dc3f4f0794ec5df1">
+        <dex dex="D:\workingProjects\FCM-Android\app\build\intermediates\pre-dexed\debug\slf4j-android-1.6.1-RC1-de5e73321ef51b8ad1af78d0528b2694d26dd835.jar" />
     </item>
 
 </items>

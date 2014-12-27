@@ -37,12 +37,14 @@ package de.huslik_elektronik.android.fcm;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Fragment;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -64,511 +66,552 @@ import de.huslik_elektronik.android.listview.FragmentPara;
  * This is the main Activity that displays the current chat session.
  */
 public class Fcm extends Activity {
-	// Debugging
+    // Debugging
 
-	private static final String TAG = "FCM";
-	public static final boolean D = true;
+    private static final String TAG = "FCM";
+    public static final boolean D = true;
 
-	// Modules
-	public static final boolean M_MENU = true;
-	public static final boolean M_PARA = false;
-	public static final boolean M_SENS = true;
-	public static final boolean M_GPS = true;
+    // Modules
+    public static final boolean M_MENU = true;
+    public static final boolean M_PARA = false;
+    public static final boolean M_SENS = true;
+    public static final boolean M_GPS = true;
 
-	// Message types sent from the BluetoothChatService Handler
-	public static final int MESSAGE_STATE_CHANGE = 1;
-	public static final int MESSAGE_READ = 2;
-	public static final int MESSAGE_WRITE = 3;
-	public static final int MESSAGE_DEVICE_NAME = 4;
-	public static final int MESSAGE_TOAST = 5;
+    // Message types sent from the BluetoothChatService Handler
+    public static final int MESSAGE_STATE_CHANGE = 1;
+    public static final int MESSAGE_READ = 2;
+    public static final int MESSAGE_WRITE = 3;
+    public static final int MESSAGE_DEVICE_NAME = 4;
+    public static final int MESSAGE_TOAST = 5;
 
-	// Key names received from the BluetoothChatService Handler
-	public static final String DEVICE_NAME = "device_name";
-	public static final String TOAST = "toast";
+    // Key names received from the BluetoothChatService Handler
+    public static final String DEVICE_NAME = "device_name";
+    public static final String TOAST = "toast";
 
-	// Intent request codes
-	private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
+    // Intent request codes
+    private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
 
-	private static final int REQUEST_ENABLE_BT = 3;
+    private static final int REQUEST_ENABLE_BT = 3;
 
-	// Preferences FCM
-	public static String PREFS_NAME = "FCM_Android";
-	public static String LAST_BT = "lastKnownDevice";
+    // Preferences FCM
+    public static String PREFS_NAME = "FCM_Android";
+    public static String LAST_BT = "lastKnownDevice";
 
     SharedPreferences setting;
-	public static int MENUREPEAT = 5; // after MENUREPEAT loops - menu was
-										// written to ui
+    public static int MENUREPEAT = 5; // after MENUREPEAT loops - menu was
+    // written to ui
 
-	// FcmStatus
-	public static final int FCM_NOTCONNECT = 0;
-	public static final int FCM_CONNECTED = 1;
+    // FcmStatus
+    public static final int FCM_NOTCONNECT = 0;
+    public static final int FCM_CONNECTED = 1;
 
-	// Tabbed Style
-	public static final String FMENU = "FRAGMENU";
-	private ActionBar.Tab tbMenu;
-	private FragmentMenu fMenu;
+    // Tabbed Style
+    public static final String FMENU = "FRAGMENU";
+    private ActionBar.Tab tbMenu;
+    private FragmentMenu fMenu;
 
-	public static final String FINFO = "FRAGINFO";
-	private ActionBar.Tab tbInfo;
-	private FragementInfo fInfo;
+    public static final String FINFO = "FRAGINFO";
+    private ActionBar.Tab tbInfo;
+    private FragementInfo fInfo;
 
-	public static final String FPARA = "FRAGPARA";
-	private ActionBar.Tab tbPara;
-	private FragmentPara fPara;
+    public static final String FPARA = "FRAGPARA";
+    private ActionBar.Tab tbPara;
+    private FragmentPara fPara;
 
-	public static final String FSENS = "FRAGSENS";
-	private ActionBar.Tab tbSens;
-	private FragmentSensor fSens;
+    public static final String FSENS = "FRAGSENS";
+    private ActionBar.Tab tbSens;
+    private FragmentSensor fSens;
 
-	public static final String FGPS = "FRAGGPS";
-	private ActionBar.Tab tbGps;
-	private FragmentGps fGps;
+    public static final String FGPS = "FRAGGPS";
+    private ActionBar.Tab tbGps;
+    private FragmentGps fGps;
 
-	// Power Manager
-	public PowerManager pm = null;
-	protected PowerManager.WakeLock mWakeLock;
+    private Fragment activeTab;
+    private int gpsStatus;
 
-	// FCM Version
-	private int versionH = -1, versionL = -1;
 
-	// FCM Data Handling
-	private FcmData fd = new FcmData();
-	private FcmByteBuffer buffer = new FcmByteBuffer(this);
+    // Power Manager
+    public PowerManager pm = null;
+    protected PowerManager.WakeLock mWakeLock;
 
-	// Name of the connected device
-	private String mConnectedDeviceName = null;
+    // FCM Version
+    private int versionH = -1, versionL = -1;
 
-	// Local Bluetooth adapter
-	private BluetoothAdapter mBluetoothAdapter = null;
-	// Member object for the chat services
-	private FcmService mFcmService = null;
-	// FcmStatus
-	public int mFcmConnectStatus = FCM_NOTCONNECT;
+    // FCM Data Handling
+    private FcmData fd = new FcmData();
+    private FcmByteBuffer buffer = new FcmByteBuffer(this);
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		if (D)
-			Log.e(TAG, "+++ ON CREATE +++");
+    // Name of the connected device
+    private String mConnectedDeviceName = null;
 
-		// Power Manager
-		pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+    // Local Bluetooth adapter
+    private BluetoothAdapter mBluetoothAdapter = null;
+    // Member object for the chat services
+    private FcmService mFcmService = null;
+    // FcmStatus
+    public int mFcmConnectStatus = FCM_NOTCONNECT;
 
-		ActionBar actionBar = getActionBar();
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (D)
+            Log.e(TAG, "+++ ON CREATE +++");
 
-		// Setup Fragements
-		StringBuilder mInfo = new StringBuilder();
+        // Power Manager
+        pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 
-		if (M_MENU) {
-			fMenu = new FragmentMenu();
-			fMenu.setFcm(this);
-			tbMenu = actionBar.newTab().setText("Menue");
-			tbMenu.setTabListener(new FcmTabListener(fMenu));
-			actionBar.addTab(tbMenu);
-			mInfo.append("Menue");
-		}
+        ActionBar actionBar = getActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-		if (M_PARA) {
-			fPara = new FragmentPara();
-			fPara.setFcm(this);
-			tbPara = actionBar.newTab().setText("Parameters");
-			tbPara.setTabListener(new FcmTabListener(fPara));
-			actionBar.addTab(tbPara);
-			mInfo.append(", Parameter");
-		}
+        // Setup Fragements
+        StringBuilder mInfo = new StringBuilder();
 
-		if (M_SENS) {
-			fSens = new FragmentSensor();
-			fSens.setFcm(this);
-			tbSens = actionBar.newTab().setText("Sensors");
-			tbSens.setTabListener(new FcmTabListener(fSens));
-			actionBar.addTab(tbSens);
-			mInfo.append(", Sensors");
-		}
+        if (M_MENU) {
+            fMenu = new FragmentMenu();
+            fMenu.setFcm(this);
+            tbMenu = actionBar.newTab().setText("Menue");
+            tbMenu.setTabListener(new FcmTabListener(fMenu, this));
+            actionBar.addTab(tbMenu);
+            mInfo.append("Menue");
+        }
 
-		if (M_GPS) {
-			fGps = new FragmentGps();
-			fGps.setFcm(this);
-			tbGps = actionBar.newTab().setText("Gps");
-			tbGps.setTabListener(new FcmTabListener(fGps));
-			actionBar.addTab(tbGps);
-			mInfo.append(", GPS");
-		}
+        if (M_PARA) {
+            fPara = new FragmentPara();
+            fPara.setFcm(this);
+            tbPara = actionBar.newTab().setText("Parameters");
+            tbPara.setTabListener(new FcmTabListener(fPara, this));
+            actionBar.addTab(tbPara);
+            mInfo.append(", Parameter");
+        }
 
-		fInfo = new FragementInfo();
-		fInfo.setModules(mInfo.toString());
-		fInfo.setFcm(this);
-		tbInfo = actionBar.newTab().setText("Info");
-		tbInfo.setTabListener(new FcmTabListener(fInfo));
-		actionBar.addTab(tbInfo);
+        if (M_SENS) {
+            fSens = new FragmentSensor();
+            fSens.setFcm(this);
+            tbSens = actionBar.newTab().setText("Sensors");
+            tbSens.setTabListener(new FcmTabListener(fSens, this));
+            actionBar.addTab(tbSens);
+            mInfo.append(", Sensors");
+        }
 
-		// Set up the window layout
-		setContentView(R.layout.main);
+        if (M_GPS) {
+            fGps = new FragmentGps();
+            fGps.setFcm(this);
+            tbGps = actionBar.newTab().setText("Gps");
+            tbGps.setTabListener(new FcmTabListener(fGps, this));
+            actionBar.addTab(tbGps);
+            mInfo.append(", GPS");
+        }
 
-		// Preferences
-		setting = getSharedPreferences(PREFS_NAME, Activity.MODE_PRIVATE);
+        fInfo = new FragementInfo();
+        fInfo.setModules(mInfo.toString());
+        fInfo.setFcm(this);
+        tbInfo = actionBar.newTab().setText("Info");
+        tbInfo.setTabListener(new FcmTabListener(fInfo, this));
+        actionBar.addTab(tbInfo);
 
-		File f = getDatabasePath(PREFS_NAME + ".xml");
+        activeTab = fMenu;
 
-		if (f != null)
-			Log.i("TAG", f.getAbsolutePath());
+        // Set up the window layout
+        setContentView(R.layout.main);
 
-		// Get local Bluetooth adapter
-		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        // Preferences
+        setting = getSharedPreferences(PREFS_NAME, Activity.MODE_PRIVATE);
 
-		// If the adapter is null, then Bluetooth is not supported
-		if (mBluetoothAdapter == null) {
-			Toast.makeText(this, "Bluetooth is not available",
-					Toast.LENGTH_LONG).show();
-			finish();
-			return;
-		}
-	}
+        File f = getDatabasePath(PREFS_NAME + ".xml");
 
-	@Override
-	public void onStart() {
-		super.onStart();
-		if (D)
-			Log.e(TAG, "++ ON START ++");
+        if (f != null)
+            Log.i("TAG", f.getAbsolutePath());
 
-		// Screenlock
-		getScreenLock();
+        // Get local Bluetooth adapter
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-		// If BT is not on, request that it be enabled.
-		// setupChat() will then be called during onActivityResult
-		if (!mBluetoothAdapter.isEnabled()) {
-			Intent enableIntent = new Intent(
-					BluetoothAdapter.ACTION_REQUEST_ENABLE);
-			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+        // If the adapter is null, then Bluetooth is not supported
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(this, "Bluetooth is not available",
+                    Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
+    }
 
-			// Otherwise, setup the chat session
-		} else {
-			if (mFcmService == null)
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (D)
+            Log.e(TAG, "++ ON START ++");
 
-				startupFcmService();
-		}
+        // Screenlock
+        getScreenLock();
 
-	}
+        // If BT is not on, request that it be enabled.
+        // setupChat() will then be called during onActivityResult
+        if (!mBluetoothAdapter.isEnabled()) {
+            Intent enableIntent = new Intent(
+                    BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
 
-	@Override
-	public synchronized void onResume() {
-		super.onResume();
-		// reconnect, if connected
-		if (D)
-			Log.e(TAG, "+ ON RESUME +");
-	}
+            // Otherwise, setup the chat session
+        } else {
+            if (mFcmService == null)
 
-	@Override
-	public synchronized void onPause() {
-		super.onPause();
-		if (D)
-			Log.e(TAG, "- ON PAUSE -");
-	}
+                startupFcmService();
+        }
 
-	@Override
-	public void onStop() {
-		super.onStop();
-		if (D)
-			Log.e(TAG, "-- ON STOP --");
+    }
 
-		// Release Screenlock
-		releaseScreenLock();
+    @Override
+    public synchronized void onResume() {
+        super.onResume();
+        // reconnect, if connected
+        if (D)
+            Log.e(TAG, "+ ON RESUME +");
+    }
+
+    @Override
+    public synchronized void onPause() {
+        super.onPause();
+        if (D)
+            Log.e(TAG, "- ON PAUSE -");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (D)
+            Log.e(TAG, "-- ON STOP --");
+
+        // Release Screenlock
+        releaseScreenLock();
 
         // store last used tab
         // TODO
     }
 
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
 
-		// Stop the Bluetooth chat services
-		if (mFcmService != null)
-			shutsownFcmService();
+        // Stop the Bluetooth chat services
+        if (mFcmService != null)
+            shutsownFcmService();
 
-		if (D)
-			Log.e(TAG, "--- ON DESTROY ---");
-	}
+        if (D)
+            Log.e(TAG, "--- ON DESTROY ---");
+    }
 
-	// Screenlock
-	public void getScreenLock() {
-		this.mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK,
-				"My Tag");
-		this.mWakeLock.acquire();
-	}
+    // Screenlock
+    public void getScreenLock() {
+        this.mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK,
+                "My Tag");
+        this.mWakeLock.acquire();
+    }
 
-	public void releaseScreenLock() {
-		this.mWakeLock.release();
-		super.onDestroy();
-	}
+    public void releaseScreenLock() {
+        this.mWakeLock.release();
+        super.onDestroy();
+    }
 
-	/**
-	 * Sends a message.
-	 * 
-	 * @param message
-	 *            A string of text to send.
-	 */
-	public void sendMessage(String message) {
-		byte[] send = message.getBytes();
-		sendMessage(send);
-	}
+    /**
+     * Sends a message.
+     *
+     * @param message A string of text to send.
+     */
+    public void sendMessage(String message) {
+        byte[] send = message.getBytes();
+        sendMessage(send);
+    }
 
-	public void sendMessage(byte[] message) {
-		// Check that we're actually connected before trying anything
-		if (mFcmService.getState() != FcmService.STATE_CONNECTED) {
-			Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT)
-					.show();
-			return;
-		}
-		if (message.length > 0) {
-			// Get the message bytes and tell the BluetoothChatService to write
-			COMMAND lastCmd = fd.getLastCmd();
-			if (lastCmd != COMMAND.MNU0)
-				mFcmService.write(fd.getCmdStart(COMMAND.STS));
-			try {
-				Thread.sleep(50);
-			} catch (InterruptedException e) {
-				Log.e("FCM", "sendMessage - wait before delete buffer");
-			}
-			if (buffer != null)
-				buffer.delete(0, buffer.size()); // need to be synchronized
+    public void sendMessage(byte[] message) {
+        // Check that we're actually connected before trying anything
+        if (mFcmService.getState() != FcmService.STATE_CONNECTED) {
+            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+        if (message.length > 0) {
+            // Get the message bytes and tell the BluetoothChatService to write
+            COMMAND lastCmd = fd.getLastCmd();
+            if (lastCmd != COMMAND.MNU0)
+                mFcmService.write(fd.getCmdStart(COMMAND.STS));
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                Log.e("FCM", "sendMessage - wait before delete buffer");
+            }
+            if (buffer != null)
+                buffer.delete(0, buffer.size()); // need to be synchronized
 
-			byte[] send = message;
-			mFcmService.write(send);
-			// Reset out string buffer to zero and clear the edit text field
-			// mOutStringBuffer.setLength(0);
+            byte[] send = message;
+            mFcmService.write(send);
+            // Reset out string buffer to zero and clear the edit text field
+            // mOutStringBuffer.setLength(0);
 
-			buffer.setLastCmd(fd.getLastCmd());
-		}
-	}
+            buffer.setLastCmd(fd.getLastCmd());
+        }
+    }
 
-	private final void setStatus(int resId) {
-		final ActionBar actionBar = getActionBar();
-		actionBar.setSubtitle(resId);
-	}
+    private final void setStatus(int resId) {
+        final ActionBar actionBar = getActionBar();
+        actionBar.setSubtitle(resId);
+    }
 
-	private final void setStatus(CharSequence subTitle) {
-		final ActionBar actionBar = getActionBar();
-		actionBar.setSubtitle(subTitle);
-	}
+    private final void setStatus(CharSequence subTitle) {
+        final ActionBar actionBar = getActionBar();
+        actionBar.setSubtitle(subTitle);
+    }
 
-	// The Handler that gets information back from the BluetoothChatService
-	private final Handler mHandler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case MESSAGE_STATE_CHANGE:
-				if (D)
-					Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
-				switch (msg.arg1) {
-				case FcmService.STATE_CONNECTED:
-					setStatus(getString(R.string.title_connected_to,
-							mConnectedDeviceName));
-					break;
-				case FcmService.STATE_CONNECTING:
-					setStatus(R.string.title_connecting);
-					break;
-				case FcmService.STATE_LISTEN:
-				case FcmService.STATE_NONE:
-					setStatus(R.string.title_not_connected);
-					break;
-				}
-				break;
-			case MESSAGE_WRITE:
-				//byte[] writeBuf = (byte[]) msg.obj;
-				// construct a string from the buffer
-				//String writeMessage = new String(writeBuf);
-				break;
-			case MESSAGE_READ:
-				// byte[] readBuf = (byte[]) msg.obj;
+    // The Handler that gets information back from the BluetoothChatService
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MESSAGE_STATE_CHANGE:
+                    if (D)
+                        Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
+                    switch (msg.arg1) {
+                        case FcmService.STATE_CONNECTED:
+                            setStatus(getString(R.string.title_connected_to,
+                                    mConnectedDeviceName));
+                            break;
+                        case FcmService.STATE_CONNECTING:
+                            setStatus(R.string.title_connecting);
+                            break;
+                        case FcmService.STATE_LISTEN:
+                        case FcmService.STATE_NONE:
+                            setStatus(R.string.title_not_connected);
+                            break;
+                    }
+                    break;
+                case MESSAGE_WRITE:
+                    //byte[] writeBuf = (byte[]) msg.obj;
+                    // construct a string from the buffer
+                    //String writeMessage = new String(writeBuf);
+                    break;
+                case MESSAGE_READ:
+                    // byte[] readBuf = (byte[]) msg.obj;
 
-				byte[] readBuf = (byte[]) msg.obj;
-				buffer.add(readBuf, msg.arg1); // byte buffer solves 0x10 LF
-				break;
+                    byte[] readBuf = (byte[]) msg.obj;
+                    buffer.add(readBuf, msg.arg1); // byte buffer solves 0x10 LF
+                    break;
 
-			case MESSAGE_DEVICE_NAME:
-				// save the connected device's name
-				mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
-				Toast.makeText(getApplicationContext(),
-						"Connected to " + mConnectedDeviceName,
-						Toast.LENGTH_SHORT).show();
-				break;
-			case MESSAGE_TOAST:
-				Toast.makeText(getApplicationContext(),
-						msg.getData().getString(TOAST), Toast.LENGTH_SHORT)
-						.show();
-				break;
-			}
-		}
-	};
+                case MESSAGE_DEVICE_NAME:
+                    // save the connected device's name
+                    mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
+                    Toast.makeText(getApplicationContext(),
+                            "Connected to " + mConnectedDeviceName,
+                            Toast.LENGTH_SHORT).show();
+                    break;
+                case MESSAGE_TOAST:
+                    Toast.makeText(getApplicationContext(),
+                            msg.getData().getString(TOAST), Toast.LENGTH_SHORT)
+                            .show();
+                    break;
+            }
+        }
+    };
 
-	public FcmByteBuffer getBuffer() {
-		return buffer;
-	}
+    public void setStatusGps(int statusGps) {
+        this.gpsStatus = statusGps;
+        invalidateOptionsMenu();
+    }
 
-	public FragmentMenu getfMenu() {
-		return fMenu;
-	}
+    public void setActiveTab(Fragment aT) {
+        activeTab = aT;
+        invalidateOptionsMenu();
+    }
 
-	public FragmentPara getfPara() {
-		return fPara;
-	}
+    public FcmByteBuffer getBuffer() {
+        return buffer;
+    }
 
-	public FragmentSensor getfSens() {
-		return fSens;
-	}
+    public FragmentMenu getfMenu() {
+        return fMenu;
+    }
 
-	public int getVersionH() {
-		return versionH;
-	}
+    public FragmentPara getfPara() {
+        return fPara;
+    }
 
-	public void setVersionH(int versionH) {
-		this.versionH = versionH;
-	}
+    public FragmentSensor getfSens() {
+        return fSens;
+    }
 
-	public int getVersionL() {
-		return versionL;
-	}
+    public int getVersionH() {
+        return versionH;
+    }
 
-	public void setVersionL(int versionL) {
-		this.versionL = versionL;
-	}
+    public void setVersionH(int versionH) {
+        this.versionH = versionH;
+    }
 
-	public PowerManager getPowerManager() {
-		return pm;
-	}
+    public int getVersionL() {
+        return versionL;
+    }
 
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (D)
-			Log.d(TAG, "onActivityResult " + resultCode);
-		switch (requestCode) {
-		case REQUEST_CONNECT_DEVICE_SECURE:
-			// When DeviceListActivity returns with a device to connect
-			if (resultCode == Activity.RESULT_OK) {
-				connectDevice(data, true, false);
-			}
-			break;
-		/*
-		 * case REQUEST_CONNECT_DEVICE_INSECURE: // When DeviceListActivity
+    public void setVersionL(int versionL) {
+        this.versionL = versionL;
+    }
+
+    public PowerManager getPowerManager() {
+        return pm;
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (D)
+            Log.d(TAG, "onActivityResult " + resultCode);
+        switch (requestCode) {
+            case REQUEST_CONNECT_DEVICE_SECURE:
+                // When DeviceListActivity returns with a device to connect
+                if (resultCode == Activity.RESULT_OK) {
+                    connectDevice(data, true, false);
+                }
+                break;
+        /*
+         * case REQUEST_CONNECT_DEVICE_INSECURE: // When DeviceListActivity
 		 * returns with a device to connect if (resultCode ==
 		 * Activity.RESULT_OK) { connectDevice(data, false); } break;
 		 */
-		case REQUEST_ENABLE_BT:
-			// When the request to enable Bluetooth returns
-			if (resultCode == Activity.RESULT_OK) {
-				// Bluetooth is now enabled, so set up a chat session
-				// setupFcmMenu();
-			} else {
-				// User did not enable Bluetooth or an error occurred
-				Log.d(TAG, "BT not enabled");
-				Toast.makeText(this, R.string.bt_not_enabled_leaving,
-						Toast.LENGTH_SHORT).show();
-				finish();
-			}
-		}
-	}
+            case REQUEST_ENABLE_BT:
+                // When the request to enable Bluetooth returns
+                if (resultCode == Activity.RESULT_OK) {
+                    // Bluetooth is now enabled, so set up a chat session
+                    // setupFcmMenu();
+                } else {
+                    // User did not enable Bluetooth or an error occurred
+                    Log.d(TAG, "BT not enabled");
+                    Toast.makeText(this, R.string.bt_not_enabled_leaving,
+                            Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+        }
+    }
 
-	private void connectDevice(Intent data, boolean secure, boolean lastConnect) {
-		String address;
+    private void connectDevice(Intent data, boolean secure, boolean lastConnect) {
+        String address;
 
-		if (lastConnect)
-			address = setting.getString(LAST_BT, "");
-		else
-			address = data.getExtras().getString(
-					DeviceListActivity.EXTRA_DEVICE_ADDRESS); // Get the device
-																// MAC address
+        if (lastConnect)
+            address = setting.getString(LAST_BT, "");
+        else
+            address = data.getExtras().getString(
+                    DeviceListActivity.EXTRA_DEVICE_ADDRESS); // Get the device
+        // MAC address
 
-		// Get the BluetoothDevice object
-		BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+        // Get the BluetoothDevice object
+        BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
 
-		// Save last BT device
-		if (device != null) {
-			Editor editor = setting.edit();
-			editor.putString(LAST_BT, address);
-			editor.commit();
-		}
+        // Save last BT device
+        if (device != null) {
+            Editor editor = setting.edit();
+            editor.putString(LAST_BT, address);
+            editor.commit();
+        }
 
-		// StartupFcmSerivce and Processing
+        // StartupFcmService and Processing
 
-		startupFcmService();
+        startupFcmService();
 
-		// Attempt to connect to the device
-		mFcmService.connect(device);
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			Log.d(TAG, "Wait to complete Connection \n" + e);
-		}
+        // Attempt to connect to the device
+        mFcmService.connect(device);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Log.d(TAG, "Wait to complete Connection \n" + e);
+        }
 
-		// FCM Hello
-		sendMessage(fd.getCmdStr(COMMAND.FCM));
-	}
+        // FCM Hello
+        sendMessage(fd.getCmdStr(COMMAND.FCM));
+    }
 
-	private void disconnectDevice() {
-		shutsownFcmService();
-	}
+    private void disconnectDevice() {
+        shutsownFcmService();
+    }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.option_menu, menu);
-		return true;
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.option_menu, menu);
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		Intent serverIntent = null;
-		switch (item.getItemId()) {
-		case R.id.last_connect:
-			// TODO connection works, but no streaming
-			if (mFcmConnectStatus == FCM_NOTCONNECT) {
-				connectDevice(null, true, true);
-				mFcmConnectStatus = FCM_CONNECTED;
-				item.setIcon(R.drawable.ic_disconnect);
+        // Global
+        if (mFcmConnectStatus == FCM_NOTCONNECT)
+            menu.findItem(R.id.last_connect).setIcon(R.drawable.ic_call_start);
+        else
+            menu.findItem(R.id.last_connect).setIcon(R.drawable.ic_disconnect);
 
-			} else {
-				disconnectDevice();
-				mFcmConnectStatus = FCM_NOTCONNECT;
-				item.setIcon(R.drawable.ic_call_start);
+        // FGps
+        if (activeTab.equals(fGps)) {
+            menu.findItem(R.id.action_flightmap).setVisible(true);
+            if (gpsStatus == FragmentGps.sLoggedTrack)
+                menu.findItem(R.id.action_share).setVisible(true);
+            else menu.findItem(R.id.action_share).setVisible(false);
+        } else {
+            menu.findItem(R.id.action_flightmap).setVisible(false);
+            menu.findItem(R.id.action_share).setVisible(false);
+        }
 
-			}
+        return true;
+    }
 
-			return true;
-		case R.id.secure_connect_scan:
-			// Launch the DeviceListActivity to see devices and do scan
-			serverIntent = new Intent(this, DeviceListActivity.class);
-			startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SECURE);
-			return true;
-			// case R.id.insecure_connect_scan:
-			// // Launch the DeviceListActivity to see devices and do scan
-			// serverIntent = new Intent(this, DeviceListActivity.class);
-			// startActivityForResult(serverIntent,
-			// REQUEST_CONNECT_DEVICE_INSECURE);
-			// return true;
-			// case R.id.discoverable:
-			// // Ensure this device is discoverable by others
-			// ensureDiscoverable();
-			// return true;
-		}
-		return false;
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent serverIntent = null;
+        switch (item.getItemId()) {
+            case R.id.last_connect:
+                // TODO connection works, but no streaming
+                if (mFcmConnectStatus == FCM_NOTCONNECT) {
+                    connectDevice(null, true, true);
+                    mFcmConnectStatus = FCM_CONNECTED;
+                    //item.setIcon(R.drawable.ic_disconnect);
 
-	private void startupFcmService() {
+                } else {
+                    disconnectDevice();
+                    mFcmConnectStatus = FCM_NOTCONNECT;
+                    //item.setIcon(R.drawable.ic_call_start);
+                }
+                invalidateOptionsMenu();
 
-		// Initialize the BluetoothChatService to perform bluetooth
-		// connections
-		if (mFcmService == null)
-			mFcmService = new FcmService(this, mHandler);
-		// Buffer Processing start
-		if (buffer.running() == false)
-			buffer.startProcessing();
-	}
+                return true;
+            case R.id.secure_connect_scan:
+                // Launch the DeviceListActivity to see devices and do scan
+                serverIntent = new Intent(this, DeviceListActivity.class);
+                startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SECURE);
+                return true;
+            // case R.id.insecure_connect_scan:
+            // // Launch the DeviceListActivity to see devices and do scan
+            // serverIntent = new Intent(this, DeviceListActivity.class);
+            // startActivityForResult(serverIntent,
+            // REQUEST_CONNECT_DEVICE_INSECURE);
+            // return true;
+            // case R.id.discoverable:
+            // // Ensure this device is discoverable by others
+            // ensureDiscoverable();
+            // return true;
+            case R.id.action_flightmap:
+                fGps.startFlightmap();
+                return true;
 
-	private void shutsownFcmService() {
-		sendMessage(fd.getCmdStr(COMMAND.STS));
-		mFcmService.stop();
-		buffer.stopProcessing(); // stop worker task
-	}
+            case R.id.action_share:
+                fGps.shareTrack();
+                return true;
+
+        }
+        return false;
+    }
+
+    private void startupFcmService() {
+
+        // Initialize the BluetoothChatService to perform bluetooth
+        // connections
+        if (mFcmService == null)
+            mFcmService = new FcmService(this, mHandler);
+        // Buffer Processing start
+        if (buffer.running() == false)
+            buffer.startProcessing();
+    }
+
+    private void shutsownFcmService() {
+        sendMessage(fd.getCmdStr(COMMAND.STS));
+        mFcmService.stop();
+        buffer.stopProcessing(); // stop worker task
+    }
 
 }

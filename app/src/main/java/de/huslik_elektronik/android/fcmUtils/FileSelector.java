@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.huslik_elektronik.android.flightMap;
+package de.huslik_elektronik.android.fcmUtils;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.huslik_elektronik.android.fcm.R;
+import de.huslik_elektronik.android.flightMap.FlightMap;
 
 public class FileSelector extends Activity {
 

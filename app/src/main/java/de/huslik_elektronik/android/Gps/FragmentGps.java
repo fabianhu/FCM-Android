@@ -55,7 +55,7 @@ public class FragmentGps extends Fragment {
     public static String TAG = "FCM_GPS";
     public final static int GPS = 3;
 
-    // Fcm Status for share events
+    // Fcm Status for share events, Framerate setting
     public final static int sNoTrack = 0;
     public final static int sLoggedTrack = 1;
 
@@ -205,6 +205,16 @@ public class FragmentGps extends Fragment {
         super.onStop();
         // TODO Save list to file
 
+    }
+
+    public void setFramerate(int fr)
+    {
+        fR = (byte) fr;
+    }
+
+    public int getFramerate()
+    {
+        return (int) fR;
     }
 
     public String getKmlFilename() {

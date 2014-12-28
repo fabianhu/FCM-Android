@@ -56,6 +56,7 @@ import de.huslik_elektronik.android.Gps.GpsFrame.SPEED;
 import de.huslik_elektronik.android.Gps.GpsListAdapter;
 import de.huslik_elektronik.android.Gps.ParseFcmKml;
 import de.huslik_elektronik.android.fcm.R;
+import de.huslik_elektronik.android.fcmUtils.FileSelector;
 
 public class FlightMap extends Activity {
 

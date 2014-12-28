@@ -60,6 +60,8 @@ import java.io.File;
 import de.huslik_elektronik.android.Gps.FragmentGps;
 import de.huslik_elektronik.android.Sensor.FragmentSensor;
 import de.huslik_elektronik.android.fcm.FcmData.COMMAND;
+import de.huslik_elektronik.android.fcmUtils.FileSelector;
+import de.huslik_elektronik.android.fcmUtils.FrameRate;
 import de.huslik_elektronik.android.listview.FragmentPara;
 
 /**
@@ -90,8 +92,9 @@ public class Fcm extends Activity {
 
     // Intent request codes
     private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
-
     private static final int REQUEST_ENABLE_BT = 3;
+
+    private static final int REQUEST_FRAMERATE = 4;
 
     // Preferences FCM
     public static String PREFS_NAME = "FCM_Android";
@@ -483,6 +486,16 @@ public class Fcm extends Activity {
                             Toast.LENGTH_SHORT).show();
                     finish();
                 }
+
+            case REQUEST_FRAMERATE:
+                if (resultCode == Activity.RESULT_OK) {
+                    int frameRate = data.getIntExtra(FrameRate.FRAMERATE, 100);
+                    if (activeTab.equals(fGps))
+                        fGps.setFramerate(frameRate);
+                    else if (activeTab.equals(fSens))
+                        fSens.setFramerate(frameRate);
+
+                }
         }
     }
 
@@ -543,11 +556,20 @@ public class Fcm extends Activity {
             if (gpsStatus == FragmentGps.sLoggedTrack)
                 menu.findItem(R.id.action_share).setVisible(true);
             else menu.findItem(R.id.action_share).setVisible(false);
-        } else {
+            menu.findItem(R.id.action_Framerate).setVisible(true);
+
+        }
+        // FSensor
+        else if (activeTab.equals(fSens)) {
             menu.findItem(R.id.action_flightmap).setVisible(false);
             menu.findItem(R.id.action_share).setVisible(false);
+            menu.findItem(R.id.action_Framerate).setVisible(true);
         }
-
+        else {
+            menu.findItem(R.id.action_flightmap).setVisible(false);
+            menu.findItem(R.id.action_share).setVisible(false);
+            menu.findItem(R.id.action_Framerate).setVisible(false);
+        }
         return true;
     }
 
@@ -575,22 +597,27 @@ public class Fcm extends Activity {
                 serverIntent = new Intent(this, DeviceListActivity.class);
                 startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SECURE);
                 return true;
-            // case R.id.insecure_connect_scan:
-            // // Launch the DeviceListActivity to see devices and do scan
-            // serverIntent = new Intent(this, DeviceListActivity.class);
-            // startActivityForResult(serverIntent,
-            // REQUEST_CONNECT_DEVICE_INSECURE);
-            // return true;
-            // case R.id.discoverable:
-            // // Ensure this device is discoverable by others
-            // ensureDiscoverable();
-            // return true;
+
             case R.id.action_flightmap:
                 fGps.startFlightmap();
                 return true;
 
             case R.id.action_share:
                 fGps.shareTrack();
+                return true;
+
+            case R.id.action_Framerate:
+                Intent intent = new Intent(this, FrameRate.class);
+                intent.putExtra(FrameRate.MAX, 100);
+                if (activeTab.equals(fGps)) {
+                    intent.putExtra(FrameRate.MIN, 10);
+                    intent.putExtra(FrameRate.VALUE, fGps.getFramerate());
+                }
+                else if (activeTab.equals(fSens)) {
+                    intent.putExtra(FrameRate.MIN, 1);
+                    intent.putExtra(FrameRate.VALUE, fSens.getFramerate());
+                }
+                startActivityForResult(intent, REQUEST_FRAMERATE);
                 return true;
 
         }

@@ -27,6 +27,11 @@
         android:showAsAction="ifRoom|withText"
         android:title="@string/share"/>
     <item
+        android:id="@+id/action_Framerate"
+        android:icon="@drawable/ic_action_time"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/Framerate"/>
+    <item
         android:id="@+id/last_connect"
         android:icon="@drawable/ic_call_start"
         android:showAsAction="ifRoom|withText"

@@ -17,15 +17,13 @@
 
 package de.huslik_elektronik.android.flightMap;
 
-import java.util.List;
+import android.content.Context;
 
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
-import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener;
 import org.osmdroid.views.overlay.OverlayItem;
 
-import android.app.AlertDialog;
-import android.content.Context;
+import java.util.List;
 
 public class POIItemizedOverlay extends ItemizedIconOverlay<OverlayItem> {
 
@@ -46,14 +44,14 @@ public class POIItemizedOverlay extends ItemizedIconOverlay<OverlayItem> {
 				return false;
 			}
 		});
-		// TODO Auto-generated constructor stub
+
 		mContext = context;
 	}
 
 	@Override
 	protected boolean onSingleTapUpHelper(final int index,
 			final OverlayItem item, final MapView mapView) {
-		// TODO
+
 		return true;
 	}
 

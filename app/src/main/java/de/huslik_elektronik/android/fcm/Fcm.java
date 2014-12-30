@@ -44,7 +44,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -60,7 +59,6 @@ import java.io.File;
 import de.huslik_elektronik.android.Gps.FragmentGps;
 import de.huslik_elektronik.android.Sensor.FragmentSensor;
 import de.huslik_elektronik.android.fcm.FcmData.COMMAND;
-import de.huslik_elektronik.android.fcmUtils.FileSelector;
 import de.huslik_elektronik.android.fcmUtils.FrameRate;
 import de.huslik_elektronik.android.listview.FragmentPara;
 
@@ -233,7 +231,7 @@ public class Fcm extends Activity {
             Toast.makeText(this, "Bluetooth is not available",
                     Toast.LENGTH_LONG).show();
             finish();
-            return;
+            //return;
         }
     }
 
@@ -285,9 +283,6 @@ public class Fcm extends Activity {
 
         // Release Screenlock
         releaseScreenLock();
-
-        // store last used tab
-        // TODO
     }
 
     @Override
@@ -353,12 +348,12 @@ public class Fcm extends Activity {
         }
     }
 
-    private final void setStatus(int resId) {
+    private void setStatus(int resId) {
         final ActionBar actionBar = getActionBar();
         actionBar.setSubtitle(resId);
     }
 
-    private final void setStatus(CharSequence subTitle) {
+    private void setStatus(CharSequence subTitle) {
         final ActionBar actionBar = getActionBar();
         actionBar.setSubtitle(subTitle);
     }
@@ -479,6 +474,7 @@ public class Fcm extends Activity {
                 if (resultCode == Activity.RESULT_OK) {
                     // Bluetooth is now enabled, so set up a chat session
                     // setupFcmMenu();
+
                 } else {
                     // User did not enable Bluetooth or an error occurred
                     Log.d(TAG, "BT not enabled");
@@ -486,7 +482,7 @@ public class Fcm extends Activity {
                             Toast.LENGTH_SHORT).show();
                     finish();
                 }
-
+                break;
             case REQUEST_FRAMERATE:
                 if (resultCode == Activity.RESULT_OK) {
                     int frameRate = data.getIntExtra(FrameRate.FRAMERATE, 100);
@@ -496,6 +492,8 @@ public class Fcm extends Activity {
                         fSens.setFramerate(frameRate);
 
                 }
+                break;
+
         }
     }
 
@@ -564,8 +562,7 @@ public class Fcm extends Activity {
             menu.findItem(R.id.action_flightmap).setVisible(false);
             menu.findItem(R.id.action_share).setVisible(false);
             menu.findItem(R.id.action_Framerate).setVisible(true);
-        }
-        else {
+        } else {
             menu.findItem(R.id.action_flightmap).setVisible(false);
             menu.findItem(R.id.action_share).setVisible(false);
             menu.findItem(R.id.action_Framerate).setVisible(false);
@@ -612,8 +609,7 @@ public class Fcm extends Activity {
                 if (activeTab.equals(fGps)) {
                     intent.putExtra(FrameRate.MIN, 10);
                     intent.putExtra(FrameRate.VALUE, fGps.getFramerate());
-                }
-                else if (activeTab.equals(fSens)) {
+                } else if (activeTab.equals(fSens)) {
                     intent.putExtra(FrameRate.MIN, 1);
                     intent.putExtra(FrameRate.VALUE, fSens.getFramerate());
                 }

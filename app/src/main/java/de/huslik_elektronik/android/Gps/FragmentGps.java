@@ -66,7 +66,7 @@ public class FragmentGps extends Fragment {
     // Layout
     private View rootView;
     private TextView tvGpsData;
-    private Button btn_start, btn_stop, btn_share, btn_flightMap;
+    private Button btn_start, btn_stop;
     private ListView lvGpsList;
 
     // div
@@ -203,8 +203,6 @@ public class FragmentGps extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        // TODO Save list to file
-
     }
 
     public void setFramerate(int fr)

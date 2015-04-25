@@ -21,59 +21,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="928a092d-8c01-4579-92d4-215c16547d76" name="Default" comment="added License Info&#10;">
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\generated\source\buildConfig\debug\de\huslik_elektronik\android\fcm\BuildConfig.java" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\generated\source\r\debug\de\huslik_elektronik\android\fcm\R.java" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\dex\debug\classes.dex" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\incremental\aidl\debug\dependency.store" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\incremental\aidl\test\debug\dependency.store" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\incremental\mergeAssets\debug\merger.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\incremental\mergeAssets\test\debug\merger.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\incremental\mergeResources\debug\merger.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\incremental\mergeResources\test\debug\merger.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\manifests\full\debug\AndroidManifest.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\manifests\test\debug\AndroidManifest.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\drawable-hdpi-v4\app_icon.png" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\drawable\app_icon.png" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\drawable\ic_call_start.png" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\drawable\ic_disconnect.png" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\drawable\ic_launcher.png" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\drawable\map_blk_marker.png" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\drawable\map_blk_marker_small.png" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\drawable\map_blue_marker_small.png" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\drawable\map_green_marker_small.png" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\drawable\map_red_flag.png" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\drawable\map_red_marker_small.png" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\layout\custom_title.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\layout\device_list.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\layout\device_name.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\layout\dialog.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\layout\dparameter.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\layout\expandablelistview.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\layout\flight_map_portrait.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\layout\gps.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\layout\gpsrowlayout.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\layout\info.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\layout\main.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\layout\menu.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\layout\message.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\layout\rowlayout.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\layout\sensor.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\layout\vparameter.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\menu\option_menu.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\debug\values\values.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\resources-debug-test.ap_" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\res\resources-debug.ap_" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\intermediates\tmp\dex\debug\inputList.txt" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\outputs\apk\app-debug-unaligned.apk" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\outputs\apk\app-debug.apk" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\app\build\outputs\apk\manifest-merger-debug-report.txt" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\build\intermediates\dex-cache\cache.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\projekt\work\#Github\FCM-Android\build\intermediates\model_data.bin" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/FCM-Android.iml" afterPath="$PROJECT_DIR$/FCM-Android.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/gradle.xml" afterPath="$PROJECT_DIR$/.idea/gradle.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="FCM-Android.iws" />

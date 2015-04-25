@@ -55,3 +55,7 @@ $RECYCLE.BIN/
 
 bin/
 
+/build/intermediates
+/app/build/generated
+/app/build/intermediates
+/app/build/tmp
